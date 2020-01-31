@@ -6,7 +6,6 @@ import (
 	"github.com/labstack/echo"
 	"github.com/resto/service-menu/db"
 	"github.com/resto/service-menu/schema"
-	"net/http"
 )
 
 var mhandler = db.MenuHandler{}
@@ -31,8 +30,14 @@ func setupRoutes() {
 		return HandlerDeleteCategory(mhandler, c)
 	})
 
+	// get by id
 	e.GET("/category/:id", func(c echo.Context) error {
-		return c.String(http.StatusOK, "")
+		return HandlerGetCategory(mhandler, c)
+	})
+
+	// get all
+	e.GET("/category", func(c echo.Context) error {
+		return HandlerGetCategory(mhandler, c)
 	})
 
 	e.Logger.Fatal(e.Start(":1102"))
