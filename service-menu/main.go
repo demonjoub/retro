@@ -24,7 +24,7 @@ func setupRoutes() {
 	})
 
 	e.PUT("/category/:id", func(c echo.Context) error {
-		return c.String(http.StatusOK, "")
+		return HandlerUpdateCategory(mhandler, c)
 	})
 
 	e.DELETE("/category/:id", func(c echo.Context) error {
