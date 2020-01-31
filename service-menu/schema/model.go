@@ -19,3 +19,8 @@ type Menu struct {
 type Error struct {
 	Error string `json:"error" xml:"error"`
 }
+
+type Response struct {
+	Data    interface{} `json:"data" xml:"data"`
+	Message string      `json:"message" xml:"message"`
+}

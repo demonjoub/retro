@@ -28,7 +28,7 @@ func setupRoutes() {
 	})
 
 	e.DELETE("/category/:id", func(c echo.Context) error {
-		return c.String(http.StatusOK, "")
+		return HandlerDeleteCategory(mhandler, c)
 	})
 
 	e.GET("/category/:id", func(c echo.Context) error {
