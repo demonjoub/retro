@@ -16,6 +16,6 @@ func setupRoutes() {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 
-	e.POST("/upload", UploadFile)
+	e.POST("/upload", HandlerUploadFiles)
 	e.Logger.Fatal(e.Start(":1101"))
 }

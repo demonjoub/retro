@@ -1,14 +1,11 @@
 package main
 
 import (
-	"io"
 	"net/http"
-	"os"
-	"strconv"
-	"time"
 
 	"github.com/labstack/echo"
 	"github.com/resto/service-upload/schema"
+	"github.com/resto/util"
 )
 
 func checkError(_error error) (bool, string) {
@@ -21,43 +18,22 @@ func checkError(_error error) (bool, string) {
 	return flag, errorMessage
 }
 
-func UploadFile(c echo.Context) error {
+func HandlerUploadFiles(c echo.Context) error {
 	form, err := c.MultipartForm()
-	isError, message := checkError(err)
-	if isError {
-		return c.JSON(http.StatusNoContent, message)
+	if err != nil {
+		code := http.StatusBadRequest
+		response := util.Response(c, code, err.Error(), schema.ResponsePath{})
+		return c.JSON(code, response)
 	}
 	files := form.File["files"]
-	var paths []string
-	for _, file := range files {
-		src, err := file.Open()
-		isError, message = checkError(err)
-		if isError {
-			return c.JSON(http.StatusNoContent, message)
-		}
-		defer src.Close()
-		// Destination
-		now := time.Now() // current local time
-		sec := now.Unix()
-		data := strconv.FormatInt(sec, 10)
-		pathfile := "../images/" + data + file.Filename
-		dst, err := os.Create(pathfile)
-		isError, message = checkError(err)
-		if isError {
-			return c.JSON(http.StatusNoContent, message)
-		}
-		defer dst.Close()
-		// copy file
-		if _, err = io.Copy(dst, src); err != nil {
-			return c.JSON(http.StatusNoContent, err.Error())
-		}
-		paths = append(paths, pathfile)
+	path, err := util.WriteFile(files)
+	if err != nil {
+		code := http.StatusBadRequest
+		response := util.Response(c, code, err.Error(), schema.ResponsePath{})
+		return c.JSON(code, response)
 	}
-	response := &schema.Message{
-		Code:    http.StatusCreated,
-		Path:    paths,
-		Message: "created",
-	}
-	c.Response().WriteHeader(http.StatusCreated)
-	return c.JSONPretty(http.StatusCreated, response, "")
+	data := schema.ResponsePath{Path: path}
+	code := http.StatusCreated
+	response := util.Response(c, code, "success", data)
+	return c.JSON(code, response)
 }
