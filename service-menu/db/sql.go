@@ -18,7 +18,7 @@ func (h *MenuHandler) Initialize(value interface{}) {
 		log.Fatal(err)
 	}
 	fmt.Println("connecting success")
-
 	db.AutoMigrate(value)
+
 	h.DB = db
 }

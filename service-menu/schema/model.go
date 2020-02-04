@@ -6,14 +6,19 @@ type Category struct {
 }
 
 type Menu struct {
-	Id          string `json:"id" xml:"id"`
-	Name        string `json:"name" xml:"name"`
-	CategoryId  int    `json:"category_id" xml:"category_id"`
-	Recommend   int    `json:"recommend" xml:"recommend"`
-	SpicyRank   int    `json:"spicy_rank" xml:"spicy_rank"`
-	Price       int    `json:"price" xml:"price"`
-	ImageAvatar string `json:"image_avatar" xml:"image_avatar"`
-	Images      string `json:"images" xml:"images"`
+	Id         int      `json:"id" xml:"id"`
+	Name       string   `json:"name" xml:"name"`
+	CategoryId int      `json:"category_id" xml:"category_id"`
+	Recommend  int      `json:"recommend" xml:"recommend"`
+	SpicyRank  int      `json:"spicy_rank" xml:"spicy_rank"`
+	Price      float32  `json:"price" xml:"price"`
+	Path       []string `gorm:"-" json:"path" xml:"path"`
+}
+
+type MenuImage struct {
+	Id     int    `gorm:"index"`
+	MenuId int    `json:"id" xml:"id"`
+	Image  string `gorm:"type:varchar(100);unique_index"`
 }
 
 type Error struct {
@@ -21,6 +26,7 @@ type Error struct {
 }
 
 type Response struct {
-	Data    interface{} `json:"data" xml:"data"`
+	Code    int         `json:"code" xml:"code"`
 	Message string      `json:"message" xml:"message"`
+	Data    interface{} `json:"data" xml:"data"`
 }
