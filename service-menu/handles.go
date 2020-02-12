@@ -97,3 +97,62 @@ func HandlerCreateMenu(h db.MenuHandler, c echo.Context) error {
 	response := util.Response(c, code, "created", menu)
 	return c.JSON(code, response)
 }
+
+// query path file in schema Images
+func findImagePath(images []schema.MenuImage) []string {
+	var path []string
+	for _, image := range images {
+		path = append(path, image.Image)
+	}
+	return path
+}
+
+func HandlerGetMenu(h db.MenuHandler, c echo.Context) error {
+	category := c.QueryParam("type")
+	id := c.QueryParam("id")
+	offset := c.QueryParam("offset")
+	limit := c.QueryParam("limit")
+
+	menu := []schema.Menu{}
+	if len(category) != 0 { // get by category
+		if err := h.DB.Where("category_id = ?", category).Find(&menu).Error; err != nil {
+			code := http.StatusBadRequest
+			response := util.Response(c, code, err.Error(), schema.Menu{})
+			return c.JSON(code, response)
+		}
+	} else if len(id) > 0 { // get by id
+		if err := h.DB.Where("id = ?", id).Find(&menu).Error; err != nil {
+			code := http.StatusBadRequest
+			response := util.Response(c, code, err.Error(), schema.Menu{})
+			return c.JSON(code, response)
+		}
+	} else if len(offset) > 0 && len(limit) > 0 {
+		if err := h.DB.Limit(limit).Offset(offset).Find(&menu).Error; err != nil {
+			code := http.StatusBadRequest
+			response := util.Response(c, code, err.Error(), schema.Menu{})
+			return c.JSON(code, response)
+		}
+	} else { // get all
+		if err := h.DB.Find(&menu).Error; err != nil {
+			code := http.StatusBadRequest
+			response := util.Response(c, code, err.Error(), schema.Menu{})
+			return c.JSON(code, response)
+		}
+	}
+	images := []schema.MenuImage{}
+	for i, item := range menu {
+		var path []string
+		if err := h.DB.Select("image").Where("menu_id = ?", item.Id).Find(&images).Error; err != nil {
+			code := http.StatusNotFound
+			response := util.Response(c, code, err.Error(), schema.Menu{})
+			return c.JSON(code, response)
+		}
+		for _, image := range images {
+			path = append(path, image.Image)
+		}
+		menu[i].Path = path
+	}
+	code := http.StatusOK
+	response := util.Response(c, code, "ok", menu)
+	return c.JSON(code, response)
+}

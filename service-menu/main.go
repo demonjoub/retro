@@ -50,5 +50,10 @@ func setupRoutes() {
 		return HandlerCreateMenu(h, c)
 	})
 
+	// Get all menu
+	e.GET("/menu", func(c echo.Context) error {
+		return HandlerGetMenu(h, c)
+	})
+
 	e.Logger.Fatal(e.Start(":1102"))
 }
