@@ -7,7 +7,7 @@ const state = {
 }
 
 const getters = {
-  foods: state => state.food,
+  sports: state => state.food,
 }
 
 const actions = {

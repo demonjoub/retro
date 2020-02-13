@@ -8,10 +8,11 @@
   <div id="app">
     <!-- <router-link to="page1">Page1</router-link>
     <router-link to="page2">Page1</router-link>
-    <router-view></router-view> -->
+    <router-view></router-view>-->
     <md-bottom-bar class="md-accent" md-shift>
       <md-bottom-bar-item md-icon="address-book" @click="page1()">Page1</md-bottom-bar-item>
       <md-bottom-bar-item md-icon="plus" @click="page2()">Page2</md-bottom-bar-item>
+      <md-bottom-bar-item md-icon="plus" @click="menuPage()">Menu</md-bottom-bar-item>
     </md-bottom-bar>
     <router-view></router-view>
   </div>
@@ -21,18 +22,29 @@
 // import HelloWorld from './components/HelloWorld.vue'
 
 export default {
-  name: 'app',
-  components: {
-  },
+  name: "app",
+  components: {},
   methods: {
     page1() {
-      this.$router.push({ path: "/page1"})
+      const path = "/page1";
+      if (this.checkRouter(path)) this.$router.push({ path });
     },
     page2() {
-      this.$router.push({ path: "/page2"})
+      const path = "/page2";
+      if (this.checkRouter(path)) this.$router.push({ path });
+    },
+    menuPage() {
+      const path = "/menu";
+      if (this.checkRouter(path)) this.$router.push({ path });
+    },
+    checkRouter(path) {
+      if (this.$route.path !== path) {
+        return true;
+      }
+      return false;
     }
   }
-}
+};
 </script>
 
 <style>

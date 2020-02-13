@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="page1">
     <h1>Page 1 {{ message }}</h1>
     <Foods />
     <Sports />
@@ -8,12 +8,12 @@
 </template>
 
 <script>
-import Foods from './../../features/Foods'
-import Sports from './../../features/Sports'
-import Display from './../../features/Display'
+import Foods from "./../../features/Foods";
+import Sports from "./../../features/Sports";
+import Display from "./../../features/Display";
 
 export default {
-  name: 'hello',
+  name: "page1",
   components: {
     Foods,
     Sports,
@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       message: "Welcome to vuejs page"
-    }
+    };
   }
-}
+};
 </script>

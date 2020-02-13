@@ -38,9 +38,9 @@ export default {
   },
   computed: {
     ...mapState({
-      posts: state => state.foods.posts,
-      like: state => state.foods.like,
-      unlike: state => state.foods.unlike
+      posts: state => state.sports.posts,
+      like: state => state.sports.like,
+      unlike: state => state.sports.unlike
     })
   }
 }

@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import foods from './modules/foods'
+import sports from './modules/sports'
 
 Vue.use(Vuex, axios)
 export const store = new Vuex.Store({
   modules: {
-    foods
+    sports
   }
 })
 // export const store = new Vuex.Store({
